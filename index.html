@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <title>Etch a Sketch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>  
+
+    <div id="MainContainer"> 
+        <div id="MainWrapper">
+            <div id="HeaderWrapper"> 
+                <div id="Header"> 
+                    <h1> Etch-A-Sketch</h1>
+                </div>
+
+                <div id="HeaderContentWrapper">
+                    <div id='ClearButton' class='buttons'> 
+                              <span> 
+                                  Clear
+                              </span>
+
+                    </div>
+                    <div id='SizingOptionWrapper' > 
+                            <div id='width'> Current Width: 64</div>
+                            
+                            <input id="inputWidth" type="number" min="1" max="64" placeholder="Max Width: 64">
+
+
+                            <div id="SizingButton" class="buttons"> 
+                                <span> Enter</span>
+                            </div>
+
+                        
+
+                    </div>
+
+                    <div id='ColorButtons' class='buttons'>
+                            <span> 
+                            Color
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div id="SketchWrapper"> 
+
+
+
+            </div>  
+
+            
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+<script> 
+//setting default grid  64 by 64
+        let grid=4096;
+        let finalgrid=0;
+        const GridWrapper = document.querySelector('#SketchWrapper');
+        let GridInput=document.querySelector('#inputWidth');
+        
+        //create the boxes
+        for(i=0; i<grid; i++ ){
+            
+            const div = document.createElement('div');
+            div.classList.add('grid');      
+         
+            
+            GridWrapper.appendChild(div);
+        }
+
+        
+
+        //set on click event for changing of button size 
+        const enter = document.querySelector('#SizingButton');
+        enter.addEventListener('click', function(e) {
+            GridInput=document.querySelector('#inputWidth');
+            grid = document.querySelector('#inputWidth').value;
+           //error message if user doesnt input a valid number
+            if(grid <1 || grid >64){
+                GridInput.value='';
+                GridInput.placeholder='Enter a number between 1 and 64';
+
+            }
+
+            //if user enters valid number run this
+            else{
+                //remove all of the old grids first 
+                while (GridWrapper.firstChild) {
+                    
+                    GridWrapper.removeChild(GridWrapper.firstChild);
+                                                } 
+            //get the total number of grids needed
+            finalgrid= grid*grid;
+            
+            //create new grids and append
+            for(i=0; i<finalgrid; i++ ){
+            
+            const div = document.createElement('div');
+            div.classList.add('grid');      
+            GridWrapper.appendChild(div);
+                }
+             //edit the css of the grid so that it repeats
+            GridWrapper.style['grid-template-columns'] = 'repeat('+grid+', 1fr)';
+            GridWrapper.style['grid-template-rows'] = 'repeat('+grid+', 1fr)';
+
+                }
+      })
+      
+  
+      //function to allow enter key to be used to change the number of grid
+      GridInput.addEventListener("keyup", function(e) {
+            if (e.keyCode === 13) {
+
+            e.preventDefault();
+           
+            document.getElementById("SizingButton").click();
+            }
+            });
+
+
+
+
+//colorButton
+const Multi = document.querySelector('#ColorButtons');
+
+Multi.addEventListener('click', function(e){
+    Multi.classList.toggle("multiColor");
+})
+
+
+
+function getRandomColor(){
+    var rgb1 = Math.floor((Math.random() * 255) + 1);
+    var rgb2 = Math.floor((Math.random() * 255) + 1);
+    var rgb3 = Math.floor((Math.random() * 255) + 1);
+    return "rgb("+ rgb1 + "," +  rgb2 + "," + rgb3 +")";       //Since rgb1, rgb2 and rgb3 are variables, append its value to the string
+}
+
+
+      //mousemove to input colors into divs      
+      const AllGrids = document.querySelectorAll('.grid');
+      
+     
+
+        GridWrapper.addEventListener('mousemove', color);
+      
+    
+
+     function color(e){
+       
+        if(Multi.classList.contains('multiColor')){
+            e.target.style['background-color']=getRandomColor();
+        }
+
+        else{
+        e.target.style['background-color']= 'red';
+        }
+    
+
+      }
+    
+
+
+
+
+
+      //clear all color
+      const clear = document.querySelector('#ClearButton');
+      clear.addEventListener('click', function(e){
+        const AllGrids = document.querySelectorAll('.grid');
+        
+        console.log(AllGrids);
+        //loop through node list and set background color to white
+        for(i=0; i<AllGrids.length ;i++){
+           AllGrids[i].style['background-color']='white';
+      
+       }
+       
+    
+
+      })
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+</body>
+
+</html>
